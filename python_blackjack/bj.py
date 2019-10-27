@@ -5,6 +5,7 @@ from os import system, path
 DECK_SIZE = 52
 SUITE = ('C', 'D', 'H', 'S')
 RANK = ('A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K')
+DATA = "data.txt"
 
 class Card:
 
@@ -108,7 +109,7 @@ def loop():
         for player in players:
             for hand in player.hands:
                 hand.Update_Value()
-
+        Dump()
         #check for blackjack
         for player in players:
             for hand in player.hands:
@@ -120,7 +121,7 @@ def loop():
             for player in players:
                 for hand in player.hands:
                     while hand.value <= 21:
-                        state = 'd'
+                        state = input(": ")
                         if state == 's':
                             break
                         elif state == 'h':
@@ -140,12 +141,13 @@ def loop():
                             player.hands[-1].cards.append(hand.cards.pop())
                             player.hands[-1].Update_Value()
                             hand.Update_Value()
+                        Dump()
 
         #dealer play:
         while dealer.value < 17:
             dealer.cards.append(deck.cards.pop())
             dealer.Update_Value()
-
+        Dump()
         #payout
         for player in players:
             for hand in player.hands:
