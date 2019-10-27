@@ -1,0 +1,17 @@
+Features:
+    full table emulation
+        6 hands plus dealer with one or more hands per player
+    player profiles
+        bank, stats
+    statistics
+        game stats
+        hand odds
+        multiple live strategy
+    education
+        rulebook
+        strategy
+        counting
+        esercises
+    api
+        modular
+

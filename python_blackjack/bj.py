@@ -1,21 +1,10 @@
 
-import pygame
 from random import shuffle
 from os import system, path
-from pygame.locals import *
-from pygame.compat import geterror
-
-if not pygame.font: print("Fonts Disabled")
-if not pygame.mixer: print("Sound Disabled")
-
-main_dir = path.split(path.abspath(__file__))[0]
 
 DECK_SIZE = 52
 SUITE = ('C', 'D', 'H', 'S')
 RANK = ('A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K')
-
-init_state = True
-STATES = ['menu','bet','play','payout']
 
 class Card:
 
@@ -84,6 +73,7 @@ class Player():
         # a list of hands, used to support splitting a hand
         self.hands = []
 
+
 def Dump():
     system('cls')
     print("Dealer: ")
@@ -95,13 +85,10 @@ def Dump():
                 print(f"#{player.hands.index(hand)+1}",end="")
             print(hand)
 
+
 def loop():
     playing = True
     while playing:
-
-        if pygame.QUIT in pygame.event.get():
-            playing = False
-            break
 
         #get player bets
         for player in players:
@@ -133,9 +120,9 @@ def loop():
             for player in players:
                 for hand in player.hands:
                     while hand.value <= 21:
-                        state = 'd' #input('Move: ')
+                        state = 'd'
                         if state == 's':
-                            break;
+                            break
                         elif state == 'h':
                             hand.cards.append(deck.cards.pop())
                             hand.Update_Value()
@@ -172,69 +159,10 @@ def loop():
     
         #check shuffle(deck penetration)
         if len(deck.cards) < (DECK_SIZE * deck.shoe * 0.25):
-            deck.Build()
-
-
-
-def handle_events() -> bool:
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            return False
-        elif event.type == KEYDOWN and event.key == K_ESCAPE:
-            return False
-        elif event.type == MOUSEBUTTONDOWN:
-            pass
-    return True
-
-def run(clock: pygame.time.Clock):
-    playing = True
-    while playing:
-        clock.tick(60)
-        playing = handle_events()
-
-        if game_state == 'menu':
-            if init_state:
-                draw_menu_buttons()
-                init_state = False
-            if play_button:
-                game_state = 'play'
-                init_state = True
-            elif setting_button:
-                game_state = 'setting'
-                init_state = True
-            elif quit_button:
-                playing = False
-        elif game_state == 'play':
-            if init_state:
-                clear_menu_buttons()
-                draw_deck()
-                play_state = 'bet'  
-                init_state = False
-                if get_event(field_enter):
-                    player.hand.bet = event.field_enter
-                    init_state = False
-            
+            deck.Build()         
 
 
 if __name__ == '__main__':
-
-    pygame.init()
-    screen = pygame.display.set_mode((1200, 800))
-    pygame.display.set_caption("Blackjack")
-    
-    background = pygame.Surface(screen.get_size())
-    background = background.convert()
-    background.fill((50,150,50))
-
-    if pygame.font:
-        font = pygame.font.Font(None, 36)
-        text = font.render("Welcome to PyBj",1,(10,10,10))
-        textpos = text.get_rect(centerx=background.get_width()/2)
-        background.blit(text,textpos)
-
-    screen.blit(background, (0,0))
-    pygame.display.flip()
-    clock = pygame.time.Clock()
 
     deck = Deck()
     deck.Build()
@@ -244,5 +172,4 @@ if __name__ == '__main__':
     for player in players:
         player.hands.append(Hand())
 
-    run(clock)
-    pygame.quit()
+    loop()
